@@ -24,14 +24,12 @@ load 'rails/tasks/statistics.rake'
 
 Bundler::GemHelper.install_tasks
 
-require 'rake/testtask'
 
-Rake::TestTask.new(:spec) do |t|
-  t.libs << 'lib'
-  t.libs << 'spec'
-  t.pattern = 'spec/**/*_spec.rb'
-  t.verbose = false
+task default: [:spec]
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec) do |spec|
+    spec.pattern = 'spec/**/*_spec.rb'
+  end
+rescue LoadError => e
 end
-
-
-task default: :spec
