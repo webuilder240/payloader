@@ -3,6 +3,8 @@ module Payloader
     include Payloader::GenerateUuid
     before_create :generate_signature
 
+    has_many :site_urls
+
     validates :name, presence: true, length: {maximum: 255}
 
     def generate_signature

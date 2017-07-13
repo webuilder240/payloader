@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170713140427) do
+ActiveRecord::Schema.define(version: 20170713143700) do
+
+  create_table "payloader_site_urls", force: :cascade do |t|
+    t.integer  "site_id",                    null: false
+    t.string   "uuid",                       null: false
+    t.string   "url",                        null: false
+    t.boolean  "livemode",   default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "payloader_sites", force: :cascade do |t|
     t.string   "uuid",       null: false

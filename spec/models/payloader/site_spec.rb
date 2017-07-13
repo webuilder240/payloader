@@ -16,7 +16,7 @@ module Payloader
       expect(payloader_site.signature.present?).to eq true
     end
 
-    it 'created at generate uuid' do
+    it 'ceated at generate uuid' do
       expect(payloader_site.uuid.present?).to eq true
     end
 
