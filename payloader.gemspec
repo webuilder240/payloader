@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Payloader::VERSION
   s.authors     = ["Nishio Takuya"]
   s.email       = ["littlecub240@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Payloader."
-  s.description = "TODO: Description of Payloader."
+  s.homepage    = "https://github.com/webuilder240/payloader"
+  s.summary     = "webhook send library"
+  s.description = "webhook send library"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
