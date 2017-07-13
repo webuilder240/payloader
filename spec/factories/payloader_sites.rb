@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :payloader_site, class: 'Payloader::Site' do
-    uuid "MyString"
+    # uuid ""
     name "MyString"
-    signature "MyString"
+    # signature ""
   end
 end

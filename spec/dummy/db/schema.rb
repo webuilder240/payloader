@@ -14,9 +14,9 @@
 ActiveRecord::Schema.define(version: 20170713140427) do
 
   create_table "payloader_sites", force: :cascade do |t|
-    t.string   "uuid"
-    t.string   "name"
-    t.string   "signature"
+    t.string   "uuid",       null: false
+    t.string   "name",       null: false
+    t.string   "signature",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
