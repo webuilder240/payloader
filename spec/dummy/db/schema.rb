@@ -11,7 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170713143700) do
+ActiveRecord::Schema.define(version: 20170714133057) do
+
+  create_table "payloader_events", force: :cascade do |t|
+    t.integer  "site_id",                                     null: false
+    t.integer  "site_url_id",                                 null: false
+    t.string   "post_url",                                    null: false
+    t.string   "uuid",                                        null: false
+    t.string   "event_type",                                  null: false
+    t.text     "body",         limit: 4294967295
+    t.integer  "retry_count",                     default: 0, null: false
+    t.datetime "first_run_at"
+    t.datetime "next_run_at"
+    t.datetime "failed_at"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
 
   create_table "payloader_site_urls", force: :cascade do |t|
     t.integer  "site_id",                    null: false
