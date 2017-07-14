@@ -10,12 +10,28 @@ module Payloader
       FactoryGirl.create(:payloader_site_url, site_id: payloader_site.id)
     }
 
-    subject { payloader_site_url }
+    let(:event) {
+      FactoryGirl.create(:payloader_event, site_id: payloader_site.id, site_url_id: payloader_site_url.id)
+    }
+
+    subject { event }
     it {should respond_to(:uuid)}
-    it {should respond_to(:url)}
+    it {should respond_to(:post_url)}
 
     it 'created at generate uuid' do
-      expect(payloader_site.uuid.present?).to eq true
+      expect(event.uuid.present?).to eq true
+    end
+
+    it 'created at retry_count' do
+      expect(event.retry_count).to eq 0
+    end
+
+    it 'association site_url' do
+      expect(event.site_url.id).to eq payloader_site_url.id
+    end
+
+    it 'set post_url site_url' do
+      expect(event.post_url).to eq payloader_site_url.url
     end
   end
 end
