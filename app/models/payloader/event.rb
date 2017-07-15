@@ -8,6 +8,10 @@ module Payloader
     validates :event_type, presence: true, length: {maximum: 255}
     validates :body, presence: true
 
+    def send_payload
+      Payloader::SendPayloadJob.set(wait: 5.seconds).perform_later(id)
+    end
+
     private
 
     def set_url

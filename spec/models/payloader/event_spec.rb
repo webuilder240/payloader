@@ -33,5 +33,21 @@ module Payloader
     it 'set post_url site_url' do
       expect(event.post_url).to eq payloader_site_url.url
     end
+
+    describe 'method' do
+      describe 'send_payload' do
+        it '5秒後に Payloader::SendPayloadJob のキューにセットされる' do
+          time = Time.current
+          travel_to(time) do
+            assertion = {
+              job: Payloader::SendPayloadJob,
+              args: [event.id],
+              at: (time + 5.seconds).to_i,
+            }
+            assert_enqueued_with(assertion) { event.send_payload }
+          end
+        end
+      end
+    end
   end
 end
