@@ -28,7 +28,7 @@ module Payloader
     end
 
     def failed!
-      if retry_count >= Payloader.config.retry_limit
+      if limit_over?
         dead!
       else
         retry!
@@ -55,10 +55,18 @@ module Payloader
     end
 
     def run_time
-      (retry_count * Payloader.config.retry_interval).seconds
+      if limit_over?
+        0
+      else
+        (retry_count * Payloader.config.retry_interval).seconds
+      end
     end
 
     private
+
+    def limit_over?
+      retry_count >= Payloader.config.retry_limit
+    end
 
     def set_url
       self.post_url = site_url.url

@@ -74,6 +74,10 @@ module Payloader
           event.retry_count = 4
           expect(event.run_time).to eq 720
         end
+        it 'retry_countが上限の場合、run_timeは0を返すこと' do
+          event.retry_count = Payloader.config.retry_limit
+          expect(event.run_time).to eq 0
+        end
       end
 
     end
