@@ -43,6 +43,39 @@ module Payloader
         end
       end
 
+      describe 'failed? && failed!' do
+        it '死んでいないJOBに対してはfalseを出力すること' do
+          event.next_run_at = Time.now
+          event.retry_count = 1
+          event.save
+          expect(event.dead?).to eq false
+        end
+        it 'retry_limitが5なので、JOBが死んだ状態になること' do
+          event.retry_count = 5
+          event.failed_at = Time.now
+          event.save
+          expect(event.dead?).to eq true
+        end
+        it 'faild!を発行するとJOBが死んだ状態になること' do
+          event.retry_count = 5
+          event.save
+          event.dead!
+          expect(event.dead?).to eq true
+        end
+      end
+
+      describe 'run_time' do
+        it 'retry_countが1でintervalが180なので、180秒後に設定されていること' do
+          event.retry_count = 1
+          expect(event.run_time).to eq 180
+        end
+
+        it 'retry_countが4でintervalが180なので、720秒後に設定されていること' do
+          event.retry_count = 4
+          expect(event.run_time).to eq 720
+        end
+      end
+
     end
   end
 end
