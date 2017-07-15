@@ -36,18 +36,13 @@ module Payloader
 
     describe 'method' do
       describe 'send_payload' do
-        it '5秒後に Payloader::SendPayloadJob のキューにセットされる' do
-          time = Time.current
-          travel_to(time) do
-            assertion = {
-              job: Payloader::SendPayloadJob,
-              args: [event.id],
-              at: (time + 5.seconds).to_i,
-            }
-            assert_enqueued_with(assertion) { event.send_payload }
-          end
+        it 'Queue Set Payloader::SendPayloadJob' do
+          expect {
+            event.send_payload
+          }.to have_enqueued_job(Payloader::SendPayloadJob)
         end
       end
+
     end
   end
 end

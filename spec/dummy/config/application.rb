@@ -12,6 +12,8 @@ module Dummy
     # -- all .rb files in that directory are automatically loaded.
     config.active_job.queue_name_prefix = Rails.env
 
+    Rails.application.config.active_job.queue_adapter = :test if Rails.env.test?
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
