@@ -43,6 +43,21 @@ module Payloader
         end
       end
 
+      describe 'retry!' do
+        before { event.retry! }
+        it 'Queue Set Payloader::SendPayloadJob' do
+          expect {
+            event.send_payload
+          }.to have_enqueued_job(Payloader::SendPayloadJob)
+        end
+        it '実行時にリトライ回数が増加していること' do
+          expect(event.retry_count).to eq 1
+        end
+        it '次回実行時間が180秒後であること' do
+          expect(event.next_run_at).to eq nil
+        end
+      end
+
       describe 'failed? && failed!' do
         it '死んでいないJOBに対してはfalseを出力すること' do
           event.next_run_at = Time.now
@@ -61,6 +76,11 @@ module Payloader
           event.save
           event.dead!
           expect(event.dead?).to eq true
+        end
+
+        it 'faild!を発行すると次回実行予定が削除される' do
+          event.dead!
+          expect(event.next_run_at).to eq nil
         end
       end
 

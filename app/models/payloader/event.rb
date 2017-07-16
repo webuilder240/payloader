@@ -17,7 +17,7 @@ module Payloader
     def retry!
       self.retry_count +=1
       self.next_run_at = run_time
-      self.save
+      save
       Payloader::SendPayloadJob.set(wait: next_run_at).perform_later(id)
     end
 
@@ -47,16 +47,16 @@ module Payloader
     end
 
     def failed?
-      next_run_at.present?
+      next_run_at.present? && failed_at.nil?
     end
 
     def dead?
-      failed_at.present?
+      failed_at.present? && next_run_at.nil?
     end
 
     def run_time
       if limit_over?
-        0
+        0.seconds
       else
         (retry_count * Payloader.config.retry_interval).seconds
       end
