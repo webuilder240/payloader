@@ -1,3 +1,7 @@
+require "faraday"
+require "faraday_middleware"
+require "payloader/client"
+
 module Payloader
   class Engine < ::Rails::Engine
     isolate_namespace Payloader

@@ -8,16 +8,20 @@ module Payloader
     validates :event_type, presence: true, length: {maximum: 255}
     validates :body, presence: true
 
+    def http_method
+      'get'
+    end
+
     def send_payload
       self.first_run_at = Time.now
-      self.save
+      save!
       Payloader::SendPayloadJob.perform_later(id)
     end
 
     def retry!
       self.retry_count +=1
       self.next_run_at = run_time
-      save
+      save!
       Payloader::SendPayloadJob.set(wait: next_run_at).perform_later(id)
     end
 
