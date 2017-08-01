@@ -2,21 +2,14 @@ require 'rails_helper'
 
 module Payloader
   RSpec.describe Event, type: :model do
-    let(:payloader_site) {
-      FactoryGirl.create(:payloader_site)
-    }
-
-    let(:payloader_site_url) {
-      FactoryGirl.create(:payloader_site_url, site_id: payloader_site.id)
-    }
 
     let(:event) {
       FactoryGirl.create(:payloader_event, site_id: payloader_site.id, site_url_id: payloader_site_url.id)
     }
 
     subject { event }
+
     it {should respond_to(:uuid)}
-    it {should respond_to(:post_url)}
 
     it 'created at generate uuid' do
       expect(event.uuid.present?).to eq true

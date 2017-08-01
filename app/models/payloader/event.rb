@@ -12,6 +12,13 @@ module Payloader
       'get'
     end
 
+    def self.rerun(event_org)
+      event = event_org.dup
+      event.dup_build
+      event.save!
+      event.send_payload
+    end
+
     def send_payload
       self.first_run_at = Time.now
       save!
@@ -67,6 +74,18 @@ module Payloader
     end
 
     private
+
+    def dup_build
+      self.tap do |e|
+        e.generate_uuid
+        e.first_run_at = nil
+        e.next_run_at = nil
+        e.failed_at = nil
+        e.created_at = Time.now
+        e.updated_at = Time.now
+        e.retry_count = 0
+      end
+    end
 
     def limit_over?
       retry_count >= Payloader.config.retry_limit
