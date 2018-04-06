@@ -1,9 +1,10 @@
 FactoryGirl.define do
   factory :payloader_event, class: 'Payloader::Event' do
-    site_id 1
+    url "MyString"
+    http_method "post"
     uuid "MyString"
-    event_type "payment.success"
     body "MyText"
+    signature "MyText"
     retry_count 0
     first_run_at nil
     next_run_at nil

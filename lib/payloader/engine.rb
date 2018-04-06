@@ -1,3 +1,4 @@
+require 'sidekiq'
 require "faraday"
 require "faraday_middleware"
 require "payloader/client"

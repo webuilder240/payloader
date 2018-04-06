@@ -4,12 +4,14 @@ module Payloader
   RSpec.describe Event, type: :model do
 
     let(:event) {
-      FactoryGirl.create(:payloader_event, site_id: payloader_site.id, site_url_id: payloader_site_url.id)
+      FactoryGirl.create(:payloader_event)
     }
 
     subject { event }
 
+    it {should respond_to(:http_method)}
     it {should respond_to(:uuid)}
+    it {should respond_to(:signature)}
 
     it 'created at generate uuid' do
       expect(event.uuid.present?).to eq true
@@ -19,29 +21,18 @@ module Payloader
       expect(event.retry_count).to eq 0
     end
 
-    it 'association site_url' do
-      expect(event.site_url.id).to eq payloader_site_url.id
-    end
-
-    it 'set post_url site_url' do
-      expect(event.post_url).to eq payloader_site_url.url
-    end
-
     describe 'method' do
       describe 'send_payload' do
-        it 'Queue Set Payloader::SendPayloadJob' do
-          expect {
-            event.send_payload
-          }.to have_enqueued_job(Payloader::SendPayloadJob)
+        it 'Queue Set Payloader::SendPayloadJobWorker' do
+          event.send_payload
+          expect (Payloader::SendPayloadJobWorker).to have_enqueued_sidekiq_job('Payloader::SendPayloadJobWorker', true)
         end
       end
 
       describe 'retry!' do
         before { event.retry! }
-        it 'Queue Set Payloader::SendPayloadJob' do
-          expect {
-            event.send_payload
-          }.to have_enqueued_job(Payloader::SendPayloadJob)
+        it 'Queue Set Payloader::SendPayloadJobWorker' do
+          expect (Payloader::SendPayloadJobWorker).to have_enqueued_sidekiq_job('Payloader::SendPayloadJobWorker', true)
         end
         it '実行時にリトライ回数が増加していること' do
           expect(event.retry_count).to eq 1
